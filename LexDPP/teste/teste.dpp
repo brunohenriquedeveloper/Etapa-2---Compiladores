@@ -1,0 +1,4 @@
+family Pessoa start
+    alterable number idade << 20.
+finish
+
