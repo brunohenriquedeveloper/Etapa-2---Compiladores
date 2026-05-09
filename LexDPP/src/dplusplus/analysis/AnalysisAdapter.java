@@ -189,6 +189,12 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseTTEntryPoint(TTEntryPoint node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseTTId(TTId node)
     {
         defaultCase(node);
@@ -208,6 +214,12 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseTTInteiro(TTInteiro node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTTAssign(TTAssign node)
     {
         defaultCase(node);
     }
@@ -261,12 +273,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTTAssign(TTAssign node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseTTPonto(TTPonto node)
     {
         defaultCase(node);
@@ -315,7 +321,19 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTComentarioBloco(TComentarioBloco node)
+    public void caseTInicioComentarioBloco(TInicioComentarioBloco node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTConteudoComentario(TConteudoComentario node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTFimComentarioBloco(TFimComentarioBloco node)
     {
         defaultCase(node);
     }

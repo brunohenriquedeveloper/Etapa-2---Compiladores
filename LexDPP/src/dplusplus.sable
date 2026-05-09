@@ -1,14 +1,10 @@
 Package dplusplus;
 
 Helpers
-
     digit = ['0'..'9'];
-
     lower = ['a'..'z'];
     upper = ['A'..'Z'];
-
     letter = lower | upper;
-
     underscore = '_';
 
     espaco = ' ';
@@ -16,107 +12,80 @@ Helpers
     rc = 13;
     nl = 10;
 
-    any = [0 .. 65535];
+    any = [0 .. 0xffff];
 
+States
+    normal,
+    comentario;
 
 Tokens
+    // PALAVRAS RESERVADAS (Devem vir antes dos IDs para ter prioridade)
+    {normal} t_family = 'family';
+    {normal} t_derives_from = 'derives from';
+    {normal} t_start = 'start';
+    {normal} t_finish = 'finish';
+    {normal} t_object = 'object';
+    {normal} t_alterable = 'alterable';
+    {normal} t_unalterable = 'unalterable';
+    {normal} t_answer = 'answer';
+    {normal} t_number = 'number';
+    {normal} t_yes = 'yes';
+    {normal} t_no = 'no';
+    {normal} t_procedure = 'procedure';
+    {normal} t_function = 'function';
+    {normal} t_in_case_that = 'in case that';
+    {normal} t_otherwise = 'otherwise';
+    {normal} t_as_long_as = 'as long as';
+    {normal} t_and = 'and';
+    {normal} t_or = 'or';
+    {normal} t_if = 'if';
+    {normal} t_else = 'else';
+    
+    // PONTO DE ENTRADA
+    {normal} t_entry_point = '>>';
 
-    t_family = 'family';
+    // IDENTIFICADORES
+    {normal} t_id = lower (letter | digit | underscore)*;
+    {normal} t_id_classe = upper (letter | digit | underscore)*;
+    
+    // NÚMEROS
+    {normal} t_real = digit+ '.' digit+;
+    {normal} t_inteiro = digit+;
+    
+    // OPERADORES
+    {normal} t_assign = '<<';
+    {normal} t_soma = '+';
+    {normal} t_menos = '-';
+    {normal} t_mult = '*';
+    {normal} t_div = '/';
+    {normal} t_igual = '=';
+    {normal} t_menor = '<';
+    {normal} t_maior = '>';
+    {normal} t_not = '!';
+    
+    // SÍMBOLOS
+    {normal} t_ponto = '.';
+    {normal} t_par_esq = '(';
+    {normal} t_par_dir = ')';
+    {normal} t_col_esq = '[';
+    {normal} t_col_dir = ']';
+    {normal} t_pipe = '|';
+    {normal} t_ecomercial = '&';
+    
+    // COMENTÁRIOS
+    {normal} comentario_linha = '--' [any - [10 + 13]]*;
 
-    t_derives_from = 'derives from';
+    // Lógica de Comentário de Bloco (Ajustada para permitir conteúdo vazio)
+    {normal -> comentario} inicio_comentario_bloco = '{-';
+    {comentario} conteudo_comentario = ([any - ['-' + '}']] | '-' [any - '}'] | '}' [any - '-'])*;
+    {comentario -> normal} fim_comentario_bloco = '-}';
 
-    t_start = 'start';
-    t_finish = 'finish';
-
-    t_object = 'object';
-
-    t_alterable = 'alterable';
-    t_unalterable = 'unalterable';
-
-    t_answer = 'answer';
-    t_number = 'number';
-
-    t_yes = 'yes';
-    t_no = 'no';
-
-    t_procedure = 'procedure';
-    t_function = 'function';
-
-    t_in_case_that = 'in case that';
-
-    t_otherwise = 'otherwise';
-
-    t_as_long_as = 'as long as';
-
-    t_and = 'and';
-    t_or = 'or';
-
-    t_if = 'if';
-    t_else = 'else';
-
-
-    t_id =
-        lower (letter | digit | underscore)*;
-
-    t_id_classe =
-        upper (letter | digit | underscore)*;
-
-
-    t_real =
-        digit+ '.' digit+;
-
-    t_inteiro =
-        digit+;
-
-
-    t_soma = '+';
-
-    t_menos = '-';
-
-    t_mult = '*';
-
-    t_div = '/';
-
-    t_igual = '=';
-
-    t_menor = '<';
-
-    t_maior = '>';
-
-    t_not = '!';
-
-    t_assign = '<<';
-
-
-    t_ponto = '.';
-
-    t_par_esq = '(';
-
-    t_par_dir = ')';
-
-    t_col_esq = '[';
-
-    t_col_dir = ']';
-
-    t_pipe = '|';
-
-    t_ecomercial = '&';
-
-
-    comentario_linha =
-        '--' any* nl;
-
-
-    comentario_bloco =
-        '{-' any* '-}';
-
-
-    whitespace =
-        (espaco | tab | rc | nl)+;
-
+    // ESPAÇOS EM BRANCO
+    {normal} whitespace = (espaco | tab | rc | nl)+;
 
 Ignored Tokens
-
     whitespace,
     comentario_linha,
-    comentario_bloco;
+    inicio_comentario_bloco,
+    conteudo_comentario,
+    fim_comentario_bloco;
