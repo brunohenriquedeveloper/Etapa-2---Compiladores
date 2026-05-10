@@ -21,7 +21,8 @@ States
 Tokens
     // PALAVRAS RESERVADAS (Devem vir antes dos IDs para ter prioridade)
     {normal} t_family = 'family';
-    {normal} t_derives_from = 'derives from';
+    {normal} t_derives = 'derives';
+    {normal} t_from = 'from';
     {normal} t_start = 'start';
     {normal} t_finish = 'finish';
     {normal} t_object = 'object';

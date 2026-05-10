@@ -75,7 +75,13 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTTDerivesFrom(TTDerivesFrom node)
+    public void caseTTDerives(TTDerives node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTTFrom(TTFrom node)
     {
         defaultCase(node);
     }
