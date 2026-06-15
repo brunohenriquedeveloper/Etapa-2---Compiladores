@@ -1,0 +1,75 @@
+-- genealogia
+family Moto derives from Veiculo & family Carro derives from Veiculo.
+
+family Veiculo
+start
+
+    unalterable number anoDeFabricacao << 2020.
+    alterable answer estaQuebrado << no.
+
+    procedure alterarEstadoDeQuebrado[answer estado]
+        start
+            object Periphericals p.
+            in case that(estado = no)
+                p.show[0].
+            otherwise
+                start
+                    p.show[1].
+                    estaQuebrado << yes.
+                finish
+        finish
+finish
+
+family Moto
+start
+
+    procedure fazerSom[]
+        start
+            object Periphericals p.
+            in case that(estaQuebrado = no)
+                start
+                    p.show[1].
+                finish
+            otherwise
+                start
+                    p.show[0].
+                finish
+        finish
+
+    function Moto fabricarMoto[number ano]
+        start
+            object Moto novaMoto.
+            novaMoto
+        finish
+finish
+
+family Carro
+start
+{- Teste de comentário,
+
+em bloco -}
+
+    alterable number cilindradas << 1.0.
+    unalterable number temperaturaMinMotorSuporta << -40.
+
+    function answer seguroLigar[number temperaturaAtual]
+    start
+        temperaturaAtual > temperaturaMinMotorSuporta and cilindradas = 1.0
+    finish
+
+finish
+
+    
+family Main
+start
+
+    object Moto m.
+
+    >> procedure main[]
+        start
+            m->FazerSom[].
+            m->AlterarEstadoDeQuebrado[no].
+            m->FazerSom[].
+        finish
+
+finish
