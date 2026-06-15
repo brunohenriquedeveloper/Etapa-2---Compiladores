@@ -15,9 +15,7 @@ Helpers
     any = [0 .. 0xffff];
 
 States
-    normal,
-    comentario;
-
+    normal
 Tokens
     // PALAVRAS RESERVADAS (Devem vir antes dos IDs para ter prioridade)
     {normal} t_family = 'family';
@@ -65,6 +63,7 @@ Tokens
     {normal} t_not = '!';
     
     // SÍMBOLOS
+    {normal} t_atribuicao = '->';
     {normal} t_ponto = '.';
     {normal} t_par_esq = '(';
     {normal} t_par_dir = ')';
@@ -77,16 +76,15 @@ Tokens
     {normal} comentario_linha = '--' [any - [10 + 13]]*;
 
     // Lógica de Comentário de Bloco (Ajustada para permitir conteúdo vazio)
-    {normal -> comentario} inicio_comentario_bloco = '{-';
-    {comentario} conteudo_comentario = ([any - ['-' + '}']] | '-' [any - '}'] | '}' [any - '-'])*;
-    {comentario -> normal} fim_comentario_bloco = '-}';
-
+    {normal} comentario_bloco = '{-' ([any - ['-' + '}']] | '-' [any - '}'] | '}' [any - '-'])* '-}';
     // ESPAÇOS EM BRANCO
     {normal} whitespace = (espaco | tab | rc | nl)+;
+    
+Productions
+	
+	
 
 Ignored Tokens
     whitespace,
     comentario_linha,
-    inicio_comentario_bloco,
-    conteudo_comentario,
-    fim_comentario_bloco;
+    comentario
