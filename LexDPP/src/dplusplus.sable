@@ -81,7 +81,31 @@ Tokens
     {normal} whitespace = (espaco | tab | rc | nl)+;
     
 Productions
-	
+//Produções de declaração de variável,adição, subtração e multiplicação
+ decl =
+  {termo} termo
+  |{simples} t_alterable (nReal | nInteiro) termo
+  |{composta} t_alterable (nReal | nInteiro) decl virgula termo
+  |{simples} t_unalterable (nReal | nInteiro) termo
+  |{composta} t_unalterable (nReal | nInteiro) decl virgula termo;
+
+ relacional =
+  {expr} termo
+  |{igualdade} relacional t_igual termo;
+
+ expr =
+  {fator} fator 
+  |{t_soma} expr t_soma fator 
+  |{t_menos} expr t_menos fator;
+
+ fator =
+  {termo} termo 
+  |{t_mult} fator t_mult termo 
+  |{t_div} fator t_div termo
+
+ termo =
+  {numero} t_real | t_inteiro 
+  |{par} t_par_esq expr t_par_dir;
 	
 
 Ignored Tokens
