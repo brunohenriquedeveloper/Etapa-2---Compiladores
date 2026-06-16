@@ -1,0 +1,73 @@
+family Programa
+start
+
+    alterable number contador << 0.
+
+    unalterable number limite << 10.
+
+    function number soma [number a | number b]
+        start 
+            a + b
+        finish
+
+
+    function number teste[number x].
+
+
+    procedure teste2[number x].
+
+    procedure mostrar [number valor]
+        start
+            object Periphericals p.
+            p->show[valor].
+        finish
+
+    >> procedure main []
+        start
+
+            object Periphericals p.
+            alterable number x << 0.
+            alterable number y << 0.
+            alterable number resultado << 0.
+            alterable number maior << 0.
+            alterable number mult << 0.
+            alterable number div << 0.
+            alterable answer testeLogico << no.
+            alterable number blocoVar << 0.
+            
+
+            alterable number testandoAtributo << p.valorInterno. 
+
+
+            x << p->capture[].
+            y << p->capture[].
+
+            resultado << soma[x | y].
+
+            maior << if (x > y) x else y.
+
+            mult << x * y.
+            div << x / (y + 1).
+            
+
+            testeLogico << (x = y) and !(x > 0) or (x < 10). 
+
+
+            blocoVar << start
+                alterable number a << 5.
+                a + 1
+            finish
+
+            in case that (resultado > limite)
+                p->show[resultado].
+            otherwise
+                p->show[0].
+
+            as long as (resultado > 0)
+                start
+                    resultado << resultado - 1.
+                    p->show[resultado].
+                finish
+        finish
+
+finish

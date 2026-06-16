@@ -5,16 +5,16 @@ package dplusplus.node;
 import dplusplus.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TTDerivesFrom extends Token
+public final class TTFrom extends Token
 {
-    public TTDerivesFrom()
+    public TTFrom()
     {
-        super.setText("derives from");
+        super.setText("from");
     }
 
-    public TTDerivesFrom(int line, int pos)
+    public TTFrom(int line, int pos)
     {
-        super.setText("derives from");
+        super.setText("from");
         setLine(line);
         setPos(pos);
     }
@@ -22,18 +22,18 @@ public final class TTDerivesFrom extends Token
     @Override
     public Object clone()
     {
-      return new TTDerivesFrom(getLine(), getPos());
+      return new TTFrom(getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTTDerivesFrom(this);
+        ((Analysis) sw).caseTTFrom(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TTDerivesFrom text.");
+        throw new RuntimeException("Cannot change TTFrom text.");
     }
 }

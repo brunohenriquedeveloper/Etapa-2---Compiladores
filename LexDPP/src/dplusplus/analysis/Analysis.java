@@ -12,7 +12,8 @@ public interface Analysis extends Switch
     void setOut(Node node, Object o);
 
     void caseTTFamily(TTFamily node);
-    void caseTTDerivesFrom(TTDerivesFrom node);
+    void caseTTDerives(TTDerives node);
+    void caseTTFrom(TTFrom node);
     void caseTTStart(TTStart node);
     void caseTTFinish(TTFinish node);
     void caseTTObject(TTObject node);

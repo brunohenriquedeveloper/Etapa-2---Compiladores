@@ -1,0 +1,20 @@
+family Main
+start
+
+    >> procedure main[]
+        start
+
+            object Periphericals p.
+            alterable number i << 1.
+            alterable number n << p.capture[].
+            alterable number m << 2.
+
+            as long as (i < n)
+            start
+                n << i * n.
+                i << i + 1.
+            finish
+            n << n - m.
+            p->show[n].
+        finish
+finish
