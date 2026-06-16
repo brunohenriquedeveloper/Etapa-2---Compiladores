@@ -14,101 +14,62 @@ Helpers
 
     any = [0 .. 0xffff];
 
-States
-    normal
 Tokens
-    // PALAVRAS RESERVADAS (Devem vir antes dos IDs para ter prioridade)
-    {normal} t_family = 'family';
-    {normal} t_derives = 'derives';
-    {normal} t_from = 'from';
-    {normal} t_start = 'start';
-    {normal} t_finish = 'finish';
-    {normal} t_object = 'object';
-    {normal} t_alterable = 'alterable';
-    {normal} t_unalterable = 'unalterable';
-    {normal} t_answer = 'answer';
-    {normal} t_number = 'number';
-    {normal} t_yes = 'yes';
-    {normal} t_no = 'no';
-    {normal} t_procedure = 'procedure';
-    {normal} t_function = 'function';
-    {normal} t_in_case_that = 'in case that';
-    {normal} t_otherwise = 'otherwise';
-    {normal} t_as_long_as = 'as long as';
-    {normal} t_and = 'and';
-    {normal} t_or = 'or';
-    {normal} t_if = 'if';
-    {normal} t_else = 'else';
-    
-    // PONTO DE ENTRADA
-    {normal} t_entry_point = '>>';
+    t_alterable = 'alterable';
+    t_unalterable = 'unalterable';
 
-    // IDENTIFICADORES
-    {normal} t_id = lower (letter | digit | underscore)*;
-    {normal} t_id_classe = upper (letter | digit | underscore)*;
-    
-    // NÚMEROS
-    {normal} t_real = digit+ '.' digit+;
-    {normal} t_inteiro = digit+;
-    
-    // OPERADORES
-    {normal} t_assign = '<<';
-    {normal} t_soma = '+';
-    {normal} t_menos = '-';
-    {normal} t_mult = '*';
-    {normal} t_div = '/';
-    {normal} t_igual = '=';
-    {normal} t_menor = '<';
-    {normal} t_maior = '>';
-    {normal} t_not = '!';
-    
-    // SÍMBOLOS
-    {normal} t_atribuicao = '->';
-    {normal} t_ponto = '.';
-    {normal} t_par_esq = '(';
-    {normal} t_par_dir = ')';
-    {normal} t_col_esq = '[';
-    {normal} t_col_dir = ']';
-    {normal} t_pipe = '|';
-    {normal} t_ecomercial = '&';
-    
-    // COMENTÁRIOS
-    {normal} comentario_linha = '--' [any - [10 + 13]]*;
+    t_real = digit+ '.' digit+;
+    t_inteiro = digit+;
 
-    // Lógica de Comentário de Bloco (Ajustada para permitir conteúdo vazio)
-    {normal} comentario_bloco = '{-' ([any - ['-' + '}']] | '-' [any - '}'] | '}' [any - '-'])* '-}';
-    // ESPAÇOS EM BRANCO
-    {normal} whitespace = (espaco | tab | rc | nl)+;
-    
-Productions
-//Produções de declaração de variável,adição, subtração e multiplicação
- decl =
-  {termo} termo
-  |{simples} t_alterable (nReal | nInteiro) termo
-  |{composta} t_alterable (nReal | nInteiro) decl virgula termo
-  |{simples} t_unalterable (nReal | nInteiro) termo
-  |{composta} t_unalterable (nReal | nInteiro) decl virgula termo;
+    t_id = lower (letter | digit | underscore)*;
 
- relacional =
-  {expr} termo
-  |{igualdade} relacional t_igual termo;
+    t_soma = '+';
+    t_menos = '-';
+    t_mult = '*';
+    t_div = '/';
+    t_igual = '=';
 
- expr =
-  {fator} fator 
-  |{t_soma} expr t_soma fator 
-  |{t_menos} expr t_menos fator;
+    t_par_esq = '(';
+    t_par_dir = ')';
+    t_virgula = ',';
 
- fator =
-  {termo} termo 
-  |{t_mult} fator t_mult termo 
-  |{t_div} fator t_div termo
+    comentario_linha = '--' [any - [10 + 13]]*;
+    comentario_bloco = '{-' ([any - ['-' + '}']] | '-' [any - '}'] | '}' [any - '-'])* '-}';
 
- termo =
-  {numero} t_real | t_inteiro 
-  |{par} t_par_esq expr t_par_dir;
-	
+    whitespace = (espaco | tab | rc | nl)+;
 
 Ignored Tokens
     whitespace,
     comentario_linha,
-    comentario
+    comentario_bloco;
+
+Productions
+
+decl =
+    {simples_alterable} t_alterable termo
+  | {simples_unalterable} t_unalterable termo
+  ;
+
+relacional =
+    {expr} expr
+  | {igualdade} relacional t_igual expr
+  ;
+
+expr =
+    {fator} fator
+  | {soma} expr t_soma fator
+  | {menos} expr t_menos fator
+  ;
+
+fator =
+    {termo} termo
+  | {mult} fator t_mult termo
+  | {div} fator t_div termo
+  ;
+
+termo =
+    {real} t_real
+  | {inteiro} t_inteiro
+  | {id} t_id
+  | {par} t_par_esq expr t_par_dir
+  ;

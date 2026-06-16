@@ -5,16 +5,16 @@ package dplusplus.node;
 import dplusplus.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TTAsLongAs extends Token
+public final class TTVirgula extends Token
 {
-    public TTAsLongAs()
+    public TTVirgula()
     {
-        super.setText("as long as");
+        super.setText(",");
     }
 
-    public TTAsLongAs(int line, int pos)
+    public TTVirgula(int line, int pos)
     {
-        super.setText("as long as");
+        super.setText(",");
         setLine(line);
         setPos(pos);
     }
@@ -22,18 +22,18 @@ public final class TTAsLongAs extends Token
     @Override
     public Object clone()
     {
-      return new TTAsLongAs(getLine(), getPos());
+      return new TTVirgula(getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTTAsLongAs(this);
+        ((Analysis) sw).caseTTVirgula(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TTAsLongAs text.");
+        throw new RuntimeException("Cannot change TTVirgula text.");
     }
 }

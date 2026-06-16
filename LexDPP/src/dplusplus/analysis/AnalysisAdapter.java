@@ -69,37 +69,91 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTTFamily(TTFamily node)
+    public void caseStart(Start node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseTTDerives(TTDerives node)
+    public void caseASimplesAlterableDecl(ASimplesAlterableDecl node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseTTFrom(TTFrom node)
+    public void caseASimplesUnalterableDecl(ASimplesUnalterableDecl node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseTTStart(TTStart node)
+    public void caseAExprRelacional(AExprRelacional node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseTTFinish(TTFinish node)
+    public void caseAIgualdadeRelacional(AIgualdadeRelacional node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseTTObject(TTObject node)
+    public void caseAFatorExpr(AFatorExpr node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASomaExpr(ASomaExpr node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMenosExpr(AMenosExpr node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATermoFator(ATermoFator node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultFator(AMultFator node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADivFator(ADivFator node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseARealTermo(ARealTermo node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAInteiroTermo(AInteiroTermo node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIdTermo(AIdTermo node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAParTermo(AParTermo node)
     {
         defaultCase(node);
     }
@@ -117,102 +171,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTTAnswer(TTAnswer node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTNumber(TTNumber node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTYes(TTYes node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTNo(TTNo node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTProcedure(TTProcedure node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTFunction(TTFunction node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTInCaseThat(TTInCaseThat node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTOtherwise(TTOtherwise node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTAsLongAs(TTAsLongAs node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTAnd(TTAnd node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTOr(TTOr node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTIf(TTIf node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTElse(TTElse node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTEntryPoint(TTEntryPoint node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTId(TTId node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTIdClasse(TTIdClasse node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseTTReal(TTReal node)
     {
         defaultCase(node);
@@ -225,7 +183,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTTAssign(TTAssign node)
+    public void caseTTId(TTId node)
     {
         defaultCase(node);
     }
@@ -261,30 +219,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTTMenor(TTMenor node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTMaior(TTMaior node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTNot(TTNot node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTPonto(TTPonto node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseTTParEsq(TTParEsq node)
     {
         defaultCase(node);
@@ -297,25 +231,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTTColEsq(TTColEsq node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTColDir(TTColDir node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTPipe(TTPipe node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTEcomercial(TTEcomercial node)
+    public void caseTTVirgula(TTVirgula node)
     {
         defaultCase(node);
     }
@@ -327,19 +243,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTInicioComentarioBloco(TInicioComentarioBloco node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTConteudoComentario(TConteudoComentario node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTFimComentarioBloco(TFimComentarioBloco node)
+    public void caseTComentarioBloco(TComentarioBloco node)
     {
         defaultCase(node);
     }

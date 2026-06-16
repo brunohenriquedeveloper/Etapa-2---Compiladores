@@ -5,14 +5,14 @@ package dplusplus.node;
 import dplusplus.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TTIdClasse extends Token
+public final class TComentarioBloco extends Token
 {
-    public TTIdClasse(String text)
+    public TComentarioBloco(String text)
     {
         setText(text);
     }
 
-    public TTIdClasse(String text, int line, int pos)
+    public TComentarioBloco(String text, int line, int pos)
     {
         setText(text);
         setLine(line);
@@ -22,12 +22,12 @@ public final class TTIdClasse extends Token
     @Override
     public Object clone()
     {
-      return new TTIdClasse(getText(), getLine(), getPos());
+      return new TComentarioBloco(getText(), getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTTIdClasse(this);
+        ((Analysis) sw).caseTComentarioBloco(this);
     }
 }
