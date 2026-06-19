@@ -14,185 +14,297 @@ Helpers
 
     any = [0 .. 0xffff];
 
+    nao_traco = [any - '-'];
+    nao_traco_chave = [any - ['-' + '}']];
+
+States
+    normal;
+
 Tokens
-    /* Palavras Reservadas da Linguagem */
-    t_start = 'start';
-    t_finish = 'finish';
-    t_family = 'family';
-    t_derives = 'derives';
-    t_from = 'from';
-    t_object = 'object';
-    t_alterable = 'alterable';
-    t_unalterable = 'unalterable';
-    t_answer_type = 'answer';
-    t_number_type = 'number';
-    t_procedure = 'procedure';
-    t_function = 'function';
-    t_in_case_that = 'in case that';
-    t_otherwise = 'otherwise';
-    t_as_long_as = 'as long as';
-    t_yes = 'yes';
-    t_no = 'no';
-    t_if = 'if';
-    t_else = 'else';
+    // PALAVRAS RESERVADAS
+    {normal} t_family = 'family';
+    {normal} t_derives = 'derives';
+    {normal} t_from = 'from';
+    {normal} t_start = 'start';
+    {normal} t_finish = 'finish';
+    {normal} t_object = 'object';
+    {normal} t_alterable = 'alterable';
+    {normal} t_unalterable = 'unalterable';
+    {normal} t_answer = 'answer';
+    {normal} t_number = 'number';
+    {normal} t_yes = 'yes';
+    {normal} t_no = 'no';
+    {normal} t_procedure = 'procedure';
+    {normal} t_function = 'function';
 
-    /* Sinais e Operadores */
-    t_ponto = '.';
-    t_e_comercial = '&';
-    t_atribuicao = '<<';
-    t_seta = '->';
-    t_col_esq = '[';
-    t_col_dir = ']';
-    t_par_esq = '(';
-    t_par_dir = ')';
-    t_pipe = '|';
-    t_ponto_entrada = '>>';
+    {normal} t_in = 'in';
+    {normal} t_case = 'case';
+    {normal} t_that = 'that';
+    {normal} t_as = 'as';
+    {normal} t_long = 'long';
 
-    t_soma = '+';
-    t_menos = '-';
-    t_mult = '*';
-    t_div = '/';
-    t_igual = '=';
-    t_menor = '<';
-    t_maior = '>';
-    t_nao = '!';
-    t_and = 'and';
-    t_or = 'or';
+    {normal} t_otherwise = 'otherwise';
+    {normal} t_and = 'and';
+    {normal} t_or = 'or';
+    {normal} t_if = 'if';
+    {normal} t_else = 'else';
 
-    /* Identificadores e Valores */
-    t_id = lower (letter | digit | underscore)*;
-    t_id_classe = upper (letter | digit | underscore)*;
-    t_real = digit+ '.' digit+;
-    t_inteiro = digit+;
+    // PONTO DE ENTRADA
+    {normal} t_entry_point = '>>';
 
-    /* Comentarios e Espacos */
-    comentario_linha = '--' [any - [10 + 13]]*;
-    comentario_bloco = '{-' ([any - ['-' + '}']] | '-' [any - '}'] | '}' [any - '-'])* '-}';
-    whitespace = (espaco | tab | rc | nl)+;
+    // IDENTIFICADORES
+    {normal} t_id = lower (letter | digit | underscore)*;
+    {normal} t_id_classe = upper (letter | digit | underscore)*;
+
+    // NUMEROS
+    {normal} t_real = digit+ '.' digit+;
+    {normal} t_inteiro = digit+;
+
+    // OPERADORES E SIMBOLOS
+    {normal} t_assign = '<<';
+    {normal} t_seta = '->';
+    {normal} t_soma = '+';
+    {normal} t_menos = '-';
+    {normal} t_mult = '*';
+    {normal} t_div = '/';
+    {normal} t_igual = '=';
+    {normal} t_menor = '<';
+    {normal} t_maior = '>';
+    {normal} t_not = '!';
+    {normal} t_ponto = '.';
+    {normal} t_par_esq = '(';
+    {normal} t_par_dir = ')';
+    {normal} t_col_esq = '[';
+    {normal} t_col_dir = ']';
+    {normal} t_pipe = '|';
+    {normal} t_ecomercial = '&';
+
+    // COMENTARIOS
+    {normal} comentario_linha = '--' [any - [rc + nl]]*;
+
+    {normal} comentario_bloco = '{-' nao_traco* '-'+ (nao_traco_chave nao_traco* '-'+)* '}';
+
+    // ESPACOS EM BRANCO
+    {normal} whitespace = (espaco | tab | rc | nl)+;
 
 Ignored Tokens
-    whitespace,
+	whitespace,
     comentario_linha,
     comentario_bloco;
 
 Productions
-/* Ordem de acordo com a doc*/
-    programa = genealogia? def_classe+;
 
-    def_classe = t_family tipo_classe t_start lista_membros t_finish;
-	
-	lista_membros = membro*;
-	membro = {atributo} dec_atributo | {metodo} dec_metodo;
-    genealogia = relacao lista_relacoes* t_ponto;
-    lista_relacoes = t_e_comercial relacao;
+    // PROGRAMA
+    programa =
+        {com_genealogia} genealogia lista_classes
+      | {sem_genealogia} lista_classes
+      ;
 
-    tipo = {classe} tipo_classe | {primitivo} tipo_primitivo;
-    tipo_classe = t_id_classe;
-    tipo_primitivo = {answer} t_answer_type | {number} t_number_type;
-    relacao = t_family [filha]:tipo_classe t_derives t_from [pai]:tipo_classe;
+    lista_classes =
+        {uma} def_classe
+      | {varias} lista_classes def_classe
+      ;
 
-    atributos = dec_atributo*;
-    dec_atributo = {obj} dec_obj | {var} dec_var | {cons} dec_cons;
+    // GENEALOGIA
+    genealogia =
+        relacoes t_ponto
+      ;
 
-    metodos = dec_metodo*;
-    dec_metodo = {proc} dec_procedimento | {func} dec_funcao;
+    relacoes =
+        {uma} relacao
+      | {varias} relacoes t_ecomercial relacao
+      ;
 
-    dec_obj = t_object tipo_classe atributo;
+    relacao =
+        t_family [filha]:t_id_classe t_derives t_from [mae]:t_id_classe
+      ;
 
-    dec_var = t_alterable tipo_primitivo t_id t_atribuicao exp t_ponto;
-    dec_cons = t_unalterable tipo_primitivo t_id t_atribuicao exp t_ponto;
+    // DEFINICAO DE CLASSE
+    def_classe =
+        t_family t_id_classe t_start atributos metodos t_finish
+      ;
 
-    dec_procedimento = {com_corpo} t_ponto_entrada? t_procedure t_id t_col_esq parametros t_col_dir bloco_cmd
-                     | {abstrato} t_procedure t_id t_col_esq parametros t_col_dir t_ponto;
+    // ATRIBUTOS
+    atributos =
+        {vazio}
+      | {lista} atributos atributo_decl
+      ;
 
-    dec_funcao = {com_corpo} t_function tipo t_id t_col_esq parametros t_col_dir bloco_exp
-               | {abstrato} t_function tipo t_id t_col_esq parametros t_col_dir t_ponto;
+    atributo_decl =
+        {obj} dec_obj
+      | {var} dec_var
+      | {cons} dec_cons
+      ;
 
-    parametros = lista_parametros?;
-    lista_parametros = parametro cauda_parametro*;
-    cauda_parametro = t_pipe parametro;
-    parametro = tipo t_id;
+    // METODOS
+    metodos =
+        {vazio}
+      | {lista} metodos metodo_decl
+      ;
 
-    /* COMANDOS - Solucao para o problema do Dangling Else (Shift/Reduce) */
-    comando = {casado} comando_casado
-            | {nao_casado} comando_nao_casado;
+    metodo_decl =
+        {proc} dec_procedimento
+      | {func} dec_funcao
+      ;
 
-    comando_casado =
-        {in_case_otherwise} t_in_case_that t_par_esq exp t_par_dir [cmd_if]:comando_casado t_otherwise [cmd_else]:comando_casado
-      | {as_long} t_as_long_as t_par_esq exp t_par_dir comando_casado
-      | {atrib} t_id t_atribuicao exp t_ponto
+    dec_obj =
+        t_object t_id_classe t_id t_ponto
+      ;
+
+    dec_var =
+        t_alterable tipo_primitivo t_id t_assign exp t_ponto
+      ;
+
+    dec_cons =
+        t_unalterable tipo_primitivo t_id t_assign exp t_ponto
+      ;
+
+    tipo =
+        {classe} t_id_classe
+      | {primitivo} tipo_primitivo
+      ;
+
+    tipo_primitivo =
+        {answer} t_answer
+      | {number} t_number
+      ;
+
+    // PROCEDIMENTO
+    dec_procedimento =
+        {entrada} t_entry_point t_procedure t_id t_col_esq parametros t_col_dir bloco_cmd
+      | {corpo} t_procedure t_id t_col_esq parametros t_col_dir bloco_cmd
+      | {abstrato} t_procedure t_id t_col_esq parametros t_col_dir t_ponto
+      ;
+
+    // FUNCAO
+    dec_funcao =
+        {corpo} t_function tipo t_id t_col_esq parametros t_col_dir bloco_exp
+      | {abstrato} t_function tipo t_id t_col_esq parametros t_col_dir t_ponto
+      ;
+
+    parametros =
+        {vazio}
+      | {lista} lista_parametros
+      ;
+
+    lista_parametros =
+        {um} parametro
+      | {varios} lista_parametros t_pipe parametro
+      ;
+
+    parametro =
+        tipo t_id
+      ;
+
+    // COMANDOS: divididos em matched/unmatched para resolver o 'otherwise' pendente
+    comando =
+        {matched} comando_m
+      | {unmatched} comando_u
+      ;
+
+    comando_m =
+        {in_case_otherwise} t_in t_case t_that t_par_esq exp t_par_dir [entao]:comando_m t_otherwise [senao]:comando_m
+      | {as_long_as} [as_ini]:t_as t_long [as_fim]:t_as t_par_esq exp t_par_dir comando_m
+      | {atribuicao} t_id t_assign exp t_ponto
       | {chamada} chamada t_ponto
-      | {bloco} bloco_cmd;
+      | {bloco} bloco_cmd
+      ;
 
-    comando_nao_casado =
-        {in_case} t_in_case_that t_par_esq exp t_par_dir comando
-      | {in_case_otherwise} t_in_case_that t_par_esq exp t_par_dir [cmd_if]:comando_casado t_otherwise [cmd_else]:comando_nao_casado
-      | {as_long} t_as_long_as t_par_esq exp t_par_dir comando_nao_casado;
+    comando_u =
+        {in_case} t_in t_case t_that t_par_esq exp t_par_dir comando
+      | {in_case_otherwise} t_in t_case t_that t_par_esq exp t_par_dir [entao]:comando_m t_otherwise [senao]:comando_u
+      | {as_long_as} [as_ini]:t_as t_long [as_fim]:t_as t_par_esq exp t_par_dir comando_u
+      ;
 
-    decl_locais = {obj} dec_obj | {var} dec_var | {cons} dec_cons;
-    lista_comandos = comando*;
-    bloco_cmd = t_start decl_locais* lista_comandos t_finish;
+    bloco_cmd =
+        t_start decls_locais comandos t_finish
+      ;
 
-    /* Precedencia de Expressoes Baseada na Linguagem C */
-    /* Expressões tem que ser ajustadas para cuidado com conflitos RR e SR*/
+    bloco_exp =
+        t_start decls_locais exp t_finish
+      ;
 
-	exp = exp_or;
+    decls_locais =
+        {vazio}
+      | {lista} decls_locais atributo_decl
+      ;
 
-exp_or =
-    exp_and exp_or_tail;
+    comandos =
+        {vazio}
+      | {lista} comandos comando
+      ;
 
-exp_or_tail =
-    t_or exp_and exp_or_tail
-  | ;
+    // EXPRESSOES
+    // ternario < or < and < relacionais < + - < * / < unario < primario
+    exp =
+        {ternario} t_if t_par_esq [cond]:exp t_par_dir [entao]:exp t_else [senao]:exp
+      | {nxt} exp_or
+      ;
 
-exp_and =
-    exp_rel exp_and_tail;
+    exp_or =
+        {or} exp_or t_or exp_and
+      | {nxt} exp_and
+      ;
 
-exp_and_tail =
-    t_and exp_rel exp_and_tail
-  | ;
+    exp_and =
+        {and} exp_and t_and exp_rel
+      | {nxt} exp_rel
+      ;
 
-exp_rel =
-    exp_add exp_rel_tail;
+    exp_rel =
+        {igual} exp_rel t_igual exp_add
+      | {menor} exp_rel t_menor exp_add
+      | {maior} exp_rel t_maior exp_add
+      | {nxt} exp_add
+      ;
 
-exp_rel_tail =
-    t_igual exp_add exp_rel_tail
-  | t_menor exp_add exp_rel_tail
-  | t_maior exp_add exp_rel_tail
-  | ;
+    exp_add =
+        {soma} exp_add t_soma exp_mult
+      | {menos} exp_add t_menos exp_mult
+      | {nxt} exp_mult
+      ;
 
-exp_add =
-    {mais} exp_add t_soma exp_mult
-  | {menos} exp_add t_menos exp_mult
-  | {simples} exp_mult;
+    exp_mult =
+        {mult} exp_mult t_mult exp_un
+      | {div} exp_mult t_div exp_un
+      | {nxt} exp_un
+      ;
 
-exp_mult =
-    {mult} exp_mult t_mult exp_unaria
-  | {div} exp_mult t_div exp_unaria
-  | {simples} exp_unaria;
+    exp_un =
+        {neg} t_menos exp_un
+      | {nao} t_not exp_un
+      | {nxt} primario
+      ;
 
-exp_unaria =
-    {neg} t_menos exp_unaria
-  | {not} t_nao exp_unaria
-  | {simples} termo;
+    primario =
+        {real} t_real
+      | {inteiro} t_inteiro
+      | {yes} t_yes
+      | {no} t_no
+      | {id} t_id
+      | {chamada} chamada
+      | {acesso} cadeia t_id
+      | {parentizada} t_par_esq exp t_par_dir
+      | {bloco} bloco_exp
+      ;
 
-termo =
-    t_id cadeia
-  | {real} t_real
-  | {inteiro} t_inteiro
-  | {yes} t_yes
-  | {no} t_no
-  | {ternario} t_if t_par_esq exp t_par_dir [true_exp]:exp t_else [false_exp]:exp
-  | {parenteses} t_par_esq exp t_par_dir
-  | {bloco} bloco_exp;
+    // CHAMADA de metodo
+    chamada =
+        {simples} t_id t_col_esq lista_exp t_col_dir
+      | {qualificada} cadeia t_id t_col_esq lista_exp t_col_dir
+      ;
 
-cadeia =
-    {chamada} t_col_esq lista_exp t_col_dir cadeia
-  | {acesso} t_seta t_id cadeia
-  | ;
+    cadeia =
+        {base} t_id t_seta
+      | {rec} cadeia t_id t_seta
+      ;
 
-bloco_exp = t_start decl_locais* exp t_finish;
+    lista_exp =
+        {vazio}
+      | {lista} exps
+      ;
 
-cauda_exp = t_pipe exp;
-lista_exp = {vazia}
-          | {itens} exp cauda_exp*;
+    exps =
+        {uma} exp
+      | {varias} exps t_pipe exp
+      ;
